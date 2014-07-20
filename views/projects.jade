@@ -17,10 +17,4 @@ block content
         select(name='user[id]', required)
             for user in users
                 option(value='#{user.id}') #{user.title}
-        select(name='company[id]', required)
-            for company in companies
-                option(value='#{company.id}') #{company.title}
-        select(name='school[id]', required)
-            for school in schools
-                option(value='#{school.id}') #{school.title}
         input(type='submit', value='Create')
