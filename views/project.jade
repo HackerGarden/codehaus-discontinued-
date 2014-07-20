@@ -1,0 +1,34 @@
+extends layout
+
+block content
+    h1 #{project.title}
+
+    p
+        a(href='/projects') All projects:
+    if relations
+        if relations.length
+            p #{project.title} has #{relations.length} listed skills:
+            ul.items
+                for other in relations
+                    li.item
+                        a(href='/skills/#{other.id}') #{other.title}
+    else
+        p #{project.title} has no relations.
+
+
+
+    if others 
+        if others.length
+            form(action='/projects/#{project.id}/relate', method='POST')
+                p What else do they know?
+                label
+                    select(name='project[id]', required)
+                        options(value='')
+                        for skill in others
+                            option(value='#{skill.id}') #{skill.title}
+                input(type='submit', value='This!')
+            p Add your own?
+    else
+        p Have a suggestion of your own?
+
+            

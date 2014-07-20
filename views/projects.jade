@@ -1,0 +1,26 @@
+extends layout
+
+block content
+
+    if projects.length
+        p Here are the current entries:
+        ul.projects
+            for project in projects
+                li.project
+                    a(href='/projects/#{project.id}') #{project.title}
+    else
+        p There are no entries.
+
+    form(action='/projects', method='POST')
+        p Create a new project:
+        input(type='text', name='title', placeholder="Project name?", required)
+        select(name='user[id]', required)
+            for user in users
+                option(value='#{user.id}') #{user.title}
+        select(name='company[id]', required)
+            for company in companies
+                option(value='#{company.id}') #{company.title}
+        select(name='school[id]', required)
+            for school in schools
+                option(value='#{school.id}') #{school.title}
+        input(type='submit', value='Create')
