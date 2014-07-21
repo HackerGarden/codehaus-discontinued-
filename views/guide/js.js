@@ -1,8 +1,13 @@
 /** @jsx React.DOM */
 
 function increaseStep(){
-	data.currentStep++;
-	rerender();
+	if(data.currentStep != data.steps.length - 1){
+		data.currentStep++;
+		rerender();
+	}
+	else {
+		alert('lesson complete');
+	}
 }
 
 function rerender(){
@@ -68,12 +73,26 @@ var Hint = React.createClass({
 
 var Sidebar = React.createClass({
 	render: function() {
+		var results = this.props.data.steps;
 		var currentStep = this.props.data.steps[this.props.data.currentStep];
 		return (
 			<div id="sidebar">
-				<em>
-					Step {this.props.data.currentStep+1} / {this.props.data.steps.length} of {this.props.data.name}
-				</em>
+				<div>
+					<span  className="guideName">
+					{this.props.data.name}
+					</span>
+					<span className="dropdown">
+  						<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+    						{this.props.data.currentStep+1} / {this.props.data.steps.length}
+    						<span className="caret pad-left"></span>
+						</button>
+						<ul className="dropdown-menu pull-right" role="menu" aria-labelledby="dropdownMenu1">
+						{results.map(function(result) {
+						    return <li role="presentation" key={result.id}><a role="menuitem" tabindex="-1" href="#">{result.title}</a></li>;
+						})}
+						</ul>
+					</span>
+				</div>
 				<h2>
 					{currentStep.title}
 				</h2>
@@ -88,9 +107,10 @@ var Sidebar = React.createClass({
 
 var Input = React.createClass({
 	render: function() {
+		if(this.props.reset)
+			ace.edit("editor").setValue(this.props.liveStep.startingCode, 1)
 		return (
 			<div id="editor">
-				{this.props.reset ? "GOOD" : "BAD"}
 				{this.props.liveStep.startingCode}
 			</div>
 		);
@@ -106,22 +126,30 @@ var Output = React.createClass({
 		var pattern = "console\.log\\(",
 		re = new RegExp(pattern, "g");
 		code = code.replace(re, "document.body.insertAdjacentHTML('beforeend', ");
-		console.log(code);
 		var ifrm  = document.getElementsByTagName('iframe')[0], // your iframe
 		iwind = ifrm.contentWindow; 
 		iwind.document.body.innerHTML = "";
 		iwind.eval( code.toString() );
 		x = iwind.document.body.innerHTML.toString();
-		this.setState({output: x});              // re-evaluate function with eval from iframe
+		return x; // re-evaluate function with eval from iframe
+	},
+	isMatch: function(output) {
+		if(this.props.liveStep.correctOutput == output){
+			this.props.callback();
+		}
 	},
 	render: function() {
-		if(this.props.render)
-			this.eval()
+		if(this.props.render){
+			var t = this.eval();
+			this.isMatch(t)
+		}
+		else 
+			var t = "";
 		return (
 			<div id="output">
 				<iframe height="0" width="0"></iframe>
 				<div id="console" onClick={this.eval}>
-					{this.state.output}
+					{t != null ? t : ""}
 				</div>
 			</div>
 		);
@@ -129,41 +157,47 @@ var Output = React.createClass({
 });
 
 var Alert = React.createClass({
-	getInitialState: function() {
-		return {message: ""};
-	},
-	throwError: function(){
-		this.setState({message: "error"});
-	},
-	throwSuccess: function(){
-		this.setState({message: "success"});
-	},
+	getInitialState: function(){
+		return {toggle: true}
+	}, 
 	handleClick: function(event){
-		if(this.state.message == "success"){
-			increaseStep();
-		}
+		increaseStep();
+		this.setState({toggle: !this.state.toggle})
 	},
 	render: function() {
 		return (
-			<div id="alert" className={this.state.message} onClick={this.handleClick}>
-				{this.state.message}
+			<div id="alert2" className={this.state.toggle ? "success" : ""} onClick={this.handleClick}>
+				{this.state.toggle ? "success" : ""}
 			</div>
 		);
 	}
 });
 
 var Main = React.createClass({
+	handleClick: function(event){
+		increaseStep();
+	},
 	getInitialState: function() {
 		return {reset: false, render: false};
 	},
 	resetInput: function() {
-		this.setState({reset: true});
-	},
-	submitClick: function() {
-		this.setState({render: true});
+		this.setState({reset: true, render: false});
 		this.render();
 	},
-	render: function() {
+	submitClick: function() {
+		this.setState({render: true, reset: false});
+		this.render();
+	},
+	progressToNext: function(){
+		console.log(this.state.alert);
+		React.renderComponent(
+			<Alert type={success.type} />,
+			document.getElementById('alert')
+		);
+	},
+	render: function(t) {
+		if(!t)
+			var t = false;
 		return (
 			<div id="main">
 				<Input reset={this.state.reset} liveStep={this.props.data.steps[this.props.data.currentStep]} />
@@ -174,9 +208,10 @@ var Main = React.createClass({
 					<button className="btn btn-primary" onClick={this.resetInput}>
 						Reset
 					</button>
-					<Alert />
-				</div>	
-				<Output render={this.state.render}/>
+					<div id="alert">
+					</div>
+				</div>
+				<Output callback={this.progressToNext} render={this.state.render} reset={this.state.reset} liveStep={this.props.data.steps[this.props.data.currentStep]} />
 			</div>
 		);
 	}
@@ -199,6 +234,14 @@ var Container = React.createClass({
 	}
 });
 
+var success = {
+	type: "success"
+}
+
+var empty = {
+	type: ""
+}
+
 var data = {
   	name: "React.js beginners guide",
   	author: "David, Adam and Jacob",
@@ -207,9 +250,10 @@ var data = {
    			title: "Create a Component",
    			body: "Step Body",
    			hint: "try rocket science",
-   			startingCode: "var Button = React.createClass({\n 	render: function(){\n 		return (<button>Test</button>);\n 	}\n});",
+   			startingCode: "console.log('')",
    			correctOutput: "",
-   			headers: ""
+   			headers: "",
+   			id: "1"
    		},
    		{
    			title: "Add x",
@@ -217,7 +261,8 @@ var data = {
    			hint: "",
    			startingCode: "",
    			correctOutput: "",
-   			headers: ""
+   			headers: "",
+   			id: "2"
    		}
    	],
    	currentStep: 0

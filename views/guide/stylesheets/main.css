@@ -16,6 +16,10 @@
 	color: white;
 }
 
+.guideName {
+	line-height: 25px;
+}
+
 #console {
 	padding: 10px;
 	height: 200px;
@@ -28,15 +32,38 @@
 #alert {
 	float: right;
 	color: white;
-	padding: 6px 10px;
 	font-size: 12pt;
 }
 
-#alert.success {
-	background: rgb(0, 204, 102);
+#alert2 {
+	padding: 6px 10px;
 }
 
-#alert.error {
+#dropdownMenu1 {
+	background: transparent;
+	border: 1px solid lightgray;
+	border-radius: 3px;
+	outline: none;
+	margin: 0 4px;
+	text-decoration: none;
+	z-index: 12;
+}
+
+.dropdown {
+	float: right;
+}
+
+.dropdown-menu {
+	margin: 4px 4px;
+	max-width: 300px;
+}
+
+#alert2.success {
+	background: rgb(0, 204, 102);
+	cursor: pointer;
+}
+
+#alert2.error {
 	background: #FF6961;
 }
 
@@ -56,6 +83,7 @@
 
 #editor {
 	font-size: 14pt;
+	font-family: 'Droid Sans Mono';
 }
 
 .row > div {
@@ -84,9 +112,15 @@ iframe {
 	height: 100%;
 }
 
+.ace_gutter-cell {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
 h2 {
 	padding-top: 5px;
-	margin-top: 0;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 a {
@@ -102,8 +136,12 @@ a {
 }
 
 #sidebar {
-	padding: 20px;
+	padding: 10px 20px;
 	overflow-y: auto;
+}
+
+.pad-left {
+	margin-left: 5px;
 }
 
 #controls {
