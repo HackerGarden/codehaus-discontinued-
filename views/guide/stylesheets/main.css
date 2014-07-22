@@ -17,7 +17,7 @@
 }
 
 .guideName {
-	line-height: 25px;
+	line-height: 35px;
 }
 
 #console {
@@ -58,7 +58,7 @@
 	max-width: 300px;
 }
 
-#alert2.success {
+#alert2.complete {
 	background: rgb(0, 204, 102);
 	cursor: pointer;
 }
@@ -72,6 +72,11 @@
 	margin: 0;
 	border-radius: 0;
 	border: none;
+}
+
+.topbar {
+	padding-bottom: 10px;
+	border-bottom: 1px solid lightgray;
 }
 
 #main {
@@ -119,8 +124,12 @@ iframe {
 
 h2 {
 	padding-top: 5px;
-	margin-top: 20px;
+	margin-top: 15px;
 	margin-bottom: 20px;
+}
+
+.dropdown-menu a {
+	outline: none;
 }
 
 a {
@@ -138,10 +147,6 @@ a {
 #sidebar {
 	padding: 10px 20px;
 	overflow-y: auto;
-}
-
-.pad-left {
-	margin-left: 5px;
 }
 
 #controls {
