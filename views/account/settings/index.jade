@@ -99,11 +99,11 @@ block body
         label Company Name:
         input.form-control(type='text', name='company', value!='<%- company %>')
         span.help-block <%- errfor.company %>
-      div.form-group(class!='<%- errfor.phone ? "has-error" : "" %>')
+      div.form-group(style="display:none", class!='<%- errfor.phone ? "has-error" : "" %>')
         label Phone:
         input.form-control(type='text', name='phone', value!='<%- phone %>')
         span.help-block <%- errfor.phone %>
-      div.form-group(class!='<%- errfor.zip ? "has-error" : "" %>')
+      div.form-group(style="display:none", class!='<%- errfor.zip ? "has-error" : "" %>')
         label Zip:
         input.form-control(type='text', name='zip', value!='<%- zip %>')
         span.help-block <%- errfor.zip %>

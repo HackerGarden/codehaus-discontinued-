@@ -5,13 +5,14 @@ html
       title #{title}
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
     link(rel='stylesheet', href='/layouts/core.min.css?#{cacheBreaker}')
+    link(rel='stylesheet', href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css')
     block neck
   body
     div.navbar.navbar-default.navbar-fixed-top
       div.container
         div.navbar-header
           a.navbar-brand(href='/')
-            img.navbar-logo(src='/media/list.png')
+            i(class="fa fa-file-code-o")
             span.navbar-brand-label #{projectName}
           button.navbar-toggle.collapsed(data-toggle='collapse', data-target='.my-navbar-collapse')
             span.icon-bar

@@ -2,10 +2,11 @@
 
 var starting;
 
-$( window ).resize(function() {
-	$('.editor').height($(window).height() - 80);
-	$('.editor').width($(window).width() - $('#sidebar').width()- $('#console').width()-50);
+$(window).resize(function() {
+	$('#editor').height($(window).height() - 80);
+	$('#editor').width($(window).width() - $('#sidebar').width()- $('#console').width()-50);
 });
+
 
 var converter = new Showdown.converter();
 
@@ -137,6 +138,10 @@ var Main = React.createClass({
 		this.setState({reset: true, render: false});
 		ace.edit("editor").setValue(this.props.data.steps[this.props.currentStep].startingCode, 1)
 	},
+	componentDidMount: function() {
+		console.log(document.getElementsByTagName('iframe')[0].contentWindow.document.getElementsByTagName('head')[0]).write(this.props.data.headers);
+		$('head', document.getElementsByTagName('iframe')[0].contentWindow.document).append(this.props.data.headers);
+	},
 	submitClick: function() {
 		var code = ace.edit("editor").getValue();
 		var pattern = "console\.log\\(",
@@ -206,10 +211,10 @@ var Container = React.createClass({
 		return (
 			<div className="container-inner">
 				<div className="row" id="page">
-					<div className="col-md-3">
+					<div className="col-sm-3">
 						<Sidebar cb={this.switchToState} data={this.props.data} currentStep={this.state.currentStep}/>
 					</div>
-					<div className="col-md-9">
+					<div className="col-sm-9">
 						<Main cb={this.nextState} progress={this.state.progress} progressToNext={this.stepSuccess} data={this.props.data} currentStep={this.state.currentStep}/>
 					</div>	
 				</div>	
@@ -229,15 +234,18 @@ var empty = {
 var data = {
   	name: "React.js beginners guide",
   	author: "David, Adam and Jacob",
+  	headers: "<script src='http://code.jquery.com/jquery-2.1.1.min.js'></script>",
+  	showDocument: false,
    	steps: [
    		{
-   			title: "Create a Component",
+   			title: "Create a Com",
    			body: "Step Body",
    			hint: "try rocket science",
    			startingCode: "console.log('')",
    			correctOutput: "",
    			headers: "",
-   			id: "0"
+   			id: "0",
+   			savedCode: ""
    		},
    		{
    			title: "Add x",
@@ -246,7 +254,8 @@ var data = {
    			startingCode: "ffsdfd",
    			correctOutput: "",
    			headers: "",
-   			id: "1"
+   			id: "1",
+   			savedCode: ""
    		},
    		{
    			title: "Add x",
@@ -255,7 +264,8 @@ var data = {
    			startingCode: "",
    			correctOutput: "",
    			headers: "",
-   			id: "2"
+   			id: "2",
+   			savedCode: ""
    		}
    	]
 };

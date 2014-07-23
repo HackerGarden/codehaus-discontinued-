@@ -5737,7 +5737,8 @@ select, textarea, input, .form-control {
     width: 32px;
 }
 .navbar .navbar-brand-label {
-    margin-left: 35px;
+    margin-left: 5px;
+    font-weight: 200;
 }
 .footer {
     margin-top: 50px;
